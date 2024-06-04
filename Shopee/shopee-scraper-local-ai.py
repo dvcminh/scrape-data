@@ -15,9 +15,9 @@ graph_config = {
 }
 
 smart_scraper_graph = SmartScraperGraph(
-    prompt="List me all the projects with their descriptions",
+    prompt="List me all the products with their descriptions",
     # also accepts a string with the already downloaded HTML code
-    source="https://perinim.github.io/projects",
+    source="https://tiki.vn/dien-thoai-may-tinh-bang/c1789",
     config=graph_config
 )
 

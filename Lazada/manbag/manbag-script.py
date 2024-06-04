@@ -9,7 +9,7 @@ import pandas as pd
 driver = webdriver.Chrome()
 
 # Open URL
-driver.get("https://www.lazada.vn/laptop/?spm=a2o4n.searchlistcategory.cate_1.3.3faf25bcmIlnDQ")
+driver.get("https://www.lazada.vn/ba-lo-nam/?spm=a2o4n.searchlistcategory.cate_9_5.1.467363a8sLBmlX")
 sleep(random.randint(5,10))
 count = 1
 all_data = pd.DataFrame()
@@ -66,6 +66,7 @@ while True:
 
             df3['countReviews'] = countReviews
             df3['type'] = 'lazada'
+            df3['category'] = 'bag'
             # ================================ GET official status
             elems_official = driver.find_elements(By.CSS_SELECTOR , ".RfADt")
             official = ['Official' if elem_official.find_elements(By.CSS_SELECTOR, 'i.ic-dynamic-badge-76432') else '' for elem_official in elems_official]

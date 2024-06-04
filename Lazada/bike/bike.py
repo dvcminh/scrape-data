@@ -9,35 +9,31 @@ import pandas as pd
 driver = webdriver.Chrome()
 
 # Open URL
-driver.get("https://shopee.vn/")
-
-sleep(50)
+driver.get("https://www.lazada.vn/xe-mo-to-xe-tay-ga/?spm=a2o4n.searchlistcategory.cate_12.1.470125bc9fsH7R")
+sleep(random.randint(5,10))
 count = 1
 all_data = pd.DataFrame()
 while True:
-        sleep(500)
+        if count > 15:
+            break
+        sleep(random.randint(3,5))
         try:
             print("Crawl Page " + str(count))
             
             # ================================ GET link/title
-            elems = driver.find_elements(By.CSS_SELECTOR , ".shopee-search-item-result__item [href]")
+            elems = driver.find_elements(By.CSS_SELECTOR , ".RfADt [href]")
+            title = [elem.text for elem in elems]
             links = [elem.get_attribute('href') for elem in elems]
 
-            titles = driver.find_elements(By.CSS_SELECTOR , ".j5GxYe")
-            title = [elem.text for elem in titles]
-
-
             # ================================ GET price
-            elems_price = driver.find_elements(By.CSS_SELECTOR , ".t7piUP")
-            len(elems_price)
+            elems_price = driver.find_elements(By.CSS_SELECTOR , ".aBrP0")
             price = [elem_price.text for elem_price in elems_price]
-
             df1 = pd.DataFrame(list(zip(title, price, links)), columns = ['title', 'price','link_item'])
             df1['index_']= np.arange(1, len(df1) + 1)
 
             # ================================GET discount
 
-            elems_discount = driver.find_elements(By.CSS_SELECTOR , "._6iKRt-")
+            elems_discount = driver.find_elements(By.CSS_SELECTOR , ".WNoq3")
             discount_all = [elem.text for elem in elems_discount]
 
             # elems_discount = driver.find_elements(By.CSS_SELECTOR , ".WNoq3 ._1m41m")
@@ -65,15 +61,15 @@ while True:
 
             # ================================ GET location/countReviews
 
-            elems_countReviews = driver.find_elements(By.CSS_SELECTOR , ".UxAJ0R")
+            elems_countReviews = driver.find_elements(By.CSS_SELECTOR , "._6uN7R")
             countReviews = [elem.text for elem in elems_countReviews]
 
             df3['countReviews'] = countReviews
-            df3['type'] = 'shopee'
-            df3['category'] = 'smartphone'
+            df3['type'] = 'lazada'
+            df3['category'] = 'bike'
             # ================================ GET official status
-            elems_official = driver.find_elements(By.CSS_SELECTOR , "._8wgpQO")
-            official = ['Official' if elem_official.find_elements(By.CSS_SELECTOR, 'G5dDAF') else '' for elem_official in elems_official]
+            elems_official = driver.find_elements(By.CSS_SELECTOR , ".RfADt")
+            official = ['Official' if elem_official.find_elements(By.CSS_SELECTOR, 'i.ic-dynamic-badge-76432') else '' for elem_official in elems_official]
             
             official_idx = []
             for i in range(1, len(title)+1):
@@ -87,7 +83,7 @@ while True:
 
             # ================================ Next pagination
             
-            next_pagination_cmt = driver.find_element(By.CSS_SELECTOR, ".shopee-icon-button .shopee-icon-button--right")
+            next_pagination_cmt = driver.find_element(By.CSS_SELECTOR, ".ant-pagination-next .ant-pagination-item-link")
             next_pagination_cmt.click()
             print("Clicked on button next page!")
             sleep(random.randint(1,3))

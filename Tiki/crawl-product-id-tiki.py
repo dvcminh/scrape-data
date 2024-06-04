@@ -59,10 +59,10 @@ params = {
     'aggregations': '2',
     'version': 'home-persionalized',
     'trackity_id': '1ff19c9a-17ce-afec-4968-3defc4dde472',
-    'category': '1882',
+    'category': '1789',
     'page': '1',
     'src': 'c1883',
-    'urlKey':  'dien-gia-dung',  
+    'urlKey':  'dien-thoai-may-tinh-bang',  
 }
 
 
@@ -91,14 +91,15 @@ for i in range(1, 11):
         print('request success!!!')
         for record in response.json().get('data'):
             product = {
-                'url_key': record.get('url_key'),
                 'name': record.get('name'),
                 'brand_name': record.get('brand_name'),
                 'price': record.get('price'),
                 'discount': record.get('discount'),
-                'thumbnail_url': record.get('thumbnail_url'),
+                'imageUrl': record.get('thumbnail_url'),
                 'rating_average': record.get('rating_average'),
-                'review_count': record.get('review_count')
+                'review_count': record.get('review_count'),
+                'link_item': 'https://tiki.vn/' + record.get('url_path'),
+                'official': record.get('visible_impression_info')[0].get('amplitude').get('is_authentic')
             }
             product_id.append(product)
     time.sleep(random.randrange(3, 10))
