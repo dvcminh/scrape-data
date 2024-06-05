@@ -9,7 +9,7 @@ import pandas as pd
 driver = webdriver.Chrome()
 
 # Open URL
-driver.get("https://shopee.vn/")
+driver.get("https://muathongminh.vn/ao-len-c.1__100108")
 
 sleep(50)
 count = 1
