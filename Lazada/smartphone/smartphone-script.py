@@ -82,14 +82,11 @@ while True:
 
             # ================================ GET location/countReviews
 
-            sold_number_list = driver.find_elements(By.CSS_SELECTOR , ".go5yN") if driver.find_elements(By.CSS_SELECTOR , ".go5yN") else ""
-            sold_number = [elem.text if elem.text else "" for elem in sold_number_list]
-            place_list = driver.find_elements(By.CSS_SELECTOR , ".oa6ri")
-            place = [elem.text for elem in place_list]
+            elems_countReviews = driver.find_elements(By.CSS_SELECTOR , "._6uN7R")
+            countReviews = [elem.text for elem in elems_countReviews]
             subcategory = driver.find_element(By.CSS_SELECTOR, ".breadcrumb_item_anchor_last").text
 
-            df3['sold_number'] = sold_number
-            df3['place'] = place
+            df3['countReviews'] = countReviews
             df3['type'] = 'lazada'
             df3['category'] = 'smartphone'
             df3['subcategory'] = subcategory

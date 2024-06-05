@@ -84,28 +84,31 @@ params = {
 #     time.sleep(random.randrange(3, 10))
 
 product_id = []
-for i in range(1, 11):
-    params['page'] = i
-    response = requests.get('https://tiki.vn/api/personalish/v1/blocks/listings', headers=headers, params=params)
-    if response.status_code == 200:
-        print('request success!!!')
-        for record in response.json().get('data'):
-            product = {
-                'title': record.get('name'),
-                # 'brand_name': record.get('brand_name'),
-                'price': record.get('price'),   
-                'link_item': 'https://tiki.vn/' + record.get('url_path'),
-                'image_url': record.get('thumbnail_url'),
-                'discount_percent_list': record.get('discount_rate'),
-                'rating_average': record.get('rating_average'),
-                'review_count': record.get('review_count') + ' đánh giá ' if record.get('review_count') else '0 đánh giá ' + record.get('quantity_sold').get('text'),
-                'type': "tiki",
-                'category': "abc",
-                'subcategory': "xyz",
-                'official': record.get('visible_impression_info').get('amplitude').get('is_authentic')
-            }
-            product_id.append(product)
-    time.sleep(random.randrange(3, 10))
+try:
+    for i in range(1, 11):
+        params['page'] = i
+        response = requests.get('https://tiki.vn/api/personalish/v1/blocks/listings', headers=headers, params=params)
+        if response.status_code == 200:
+            print('request success!!!')
+            for record in response.json().get('data'):
+                quantity_sold = record.get('quantity_sold')
+                quantity_sold_text = quantity_sold.get('text') if quantity_sold and quantity_sold.get('text') else '0'
+                product = {
+                    'title': record.get('name'),
+                    'price': record.get('price'),   
+                    'link_item': 'https://tiki.vn/' + record.get('url_path'),
+                    'image_url': record.get('thumbnail_url'),
+                    'discount_percent_list': record.get('discount_rate'),
+                    'review_count': str(record.get('review_count')) + ' ' + quantity_sold_text,        
+                    'type': "tiki",                                                                 
+                    'category': "abc",
+                    'subcategory': "xyz",
+                    'official': record.get('visible_impression_info').get('amplitude').get('is_authentic')
+                }
+                product_id.append(product)
+        time.sleep(random.randrange(3, 10))
+except Exception as e:
+    print("End of pages or an error occurred: ", str(e))
 
 df = pd.DataFrame(product_id)
 df.to_csv('product_id_ncds.csv', index=False)
