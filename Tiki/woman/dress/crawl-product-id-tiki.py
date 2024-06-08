@@ -65,6 +65,10 @@ params = {
     'urlKey':  'dam-vay-lien',  
 }
 
+product_detailparams = {
+    'platform': 'web',
+    'spid': '1',
+}
 
 # product_id = []
 # for i in range(1, 11):
@@ -93,13 +97,19 @@ try:
             for record in response.json().get('data'):
                 quantity_sold = record.get('quantity_sold')
                 quantity_sold_text = quantity_sold.get('text') if quantity_sold and quantity_sold.get('text') else '0'
+                
+                # product_detailparams['spid'] = record.get('id')
+                product_description = requests.get('https://tiki.vn/api/v2/products/' + str(record.get('id')), headers=headers).json().get('description')          
+                
+                
                 product = {
                     'title': record.get('name'),
                     'price': record.get('price'),   
                     'link_item': 'https://tiki.vn/' + record.get('url_path'),
                     'image_url': record.get('thumbnail_url'),
                     'discount_percent_list': record.get('discount_rate'),
-                    'review_count': str(record.get('review_count')) + ' ' + quantity_sold_text,        
+                    'review_count': str(record.get('review_count')) + ' ' + quantity_sold_text,      
+                    'description': product_description,  
                     'type': "tiki",                                                                 
                     'category': "abc",
                     'subcategory': "xyz",

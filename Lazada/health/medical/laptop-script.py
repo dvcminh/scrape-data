@@ -9,7 +9,7 @@ import pandas as pd
 driver = webdriver.Chrome()
 
 # Open URL
-driver.get("https://www.lazada.vn/laptop/?spm=a2o4n.searchlist.cate_1.3.30da5305HZMZcJ")
+driver.get("https://www.lazada.vn/thiet-bi-y-te/?spm=a2o4n.searchlistcategory.cate_4.12.5c6125bcekGmfr")
 sleep(random.randint(5,10))
 count = 1
 all_data = pd.DataFrame()
@@ -43,8 +43,9 @@ while True:
             img_elements = driver.find_elements(By.CSS_SELECTOR, "._95X4G .picture-wrapper.jBwCF img")
             img_links = [elem.get_attribute('src') for elem in img_elements]
 
+
             # ================================ GET price
-            elems_price = driver.find_elements(By.CSS_SELECTOR , ".aBrP0")
+            elems_price = driver.find_elements(By.CSS_SELECTOR , ".aBrP0")  
             price = [elem_price.text for elem_price in elems_price]
             df1 = pd.DataFrame(list(zip(title, price, links, img_links)), columns = ['title', 'price','link_item', 'image_url'])
             df1['index_']= np.arange(1, len(df1) + 1)
@@ -83,10 +84,12 @@ while True:
 
             elems_countReviews = driver.find_elements(By.CSS_SELECTOR , "._6uN7R")
             countReviews = [elem.text for elem in elems_countReviews]
+            subcategory = driver.find_element(By.CSS_SELECTOR, ".breadcrumb_item_anchor_last").text
 
             df3['countReviews'] = countReviews
             df3['type'] = 'lazada'
-            df3['category'] = 'computerandlaptop'
+            df3['category'] = 'health'
+            df3['subcategory'] = 'medical'
             # ================================ GET official status
             elems_official = driver.find_elements(By.CSS_SELECTOR , ".RfADt")
             official = ['1' if elem_official.find_elements(By.CSS_SELECTOR, 'i.ic-dynamic-badge-76432') else '0' for elem_official in elems_official]
@@ -107,7 +110,7 @@ while True:
             next_pagination_cmt.click()
 
             print("Clicked on button next page!")
-            sleep(random.randint(7,10))
+            sleep(random.randint(1,3))
             try:
                 close_btn = driver.find_element("xpath", "/html/body/div[7]/div[2]/div") 
                 close_btn.click()

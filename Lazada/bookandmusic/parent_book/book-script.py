@@ -9,12 +9,12 @@ import pandas as pd
 driver = webdriver.Chrome()
 
 # Open URL
-driver.get("https://www.lazada.vn/truyen-thong-am-nhac-sach/?spm=a2o4n.searchlistcategory.cate_7.11.54e125bcmOKpkn")
+driver.get("https://www.lazada.vn/sach-tieng-viet-sach-cho-cha-me/?spm=a2o4n.searchlistcategory.cate_7_11.12.25a525bcgaEJBZ")
 sleep(random.randint(5,10))
 count = 1
 all_data = pd.DataFrame()
 while True:
-        if count > 15:
+        if count > 10:
             break
         sleep(random.randint(3,5))
         try:
@@ -24,12 +24,33 @@ while True:
             elems = driver.find_elements(By.CSS_SELECTOR , ".RfADt [href]")
             title = [elem.text for elem in elems]
             links = [elem.get_attribute('href') for elem in elems]
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.1);")
+            sleep(3)
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.2);")
+            sleep(3)
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.3);")
+            sleep(3)
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.4);")
+            sleep(3)
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.5);")
+            sleep(3)
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.6);")
+            sleep(3)
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.7);")
+            sleep(3)
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.87);")
+            sleep(random.randint(3, 5))
+            img_elements = driver.find_elements(By.CSS_SELECTOR, "._95X4G .picture-wrapper.jBwCF img")
+            img_links = [elem.get_attribute('src') for elem in img_elements]
+
 
             # ================================ GET price
-            elems_price = driver.find_elements(By.CSS_SELECTOR , ".aBrP0")
+            elems_price = driver.find_elements(By.CSS_SELECTOR , ".aBrP0")  
             price = [elem_price.text for elem_price in elems_price]
-            df1 = pd.DataFrame(list(zip(title, price, links)), columns = ['title', 'price','link_item'])
+            df1 = pd.DataFrame(list(zip(title, price, links, img_links)), columns = ['title', 'price','link_item', 'image_url'])
             df1['index_']= np.arange(1, len(df1) + 1)
+
+
 
             # ================================GET discount
 
@@ -63,13 +84,15 @@ while True:
 
             elems_countReviews = driver.find_elements(By.CSS_SELECTOR , "._6uN7R")
             countReviews = [elem.text for elem in elems_countReviews]
+            subcategory = driver.find_element(By.CSS_SELECTOR, ".breadcrumb_item_anchor_last").text
 
             df3['countReviews'] = countReviews
             df3['type'] = 'lazada'
-            df3['category'] = 'book'
+            df3['category'] = 'bookandmusic'
+            df3['subcategory'] = 'parent_book'
             # ================================ GET official status
             elems_official = driver.find_elements(By.CSS_SELECTOR , ".RfADt")
-            official = ['Official' if elem_official.find_elements(By.CSS_SELECTOR, 'i.ic-dynamic-badge-76432') else '' for elem_official in elems_official]
+            official = ['1' if elem_official.find_elements(By.CSS_SELECTOR, 'i.ic-dynamic-badge-76432') else '0' for elem_official in elems_official]
             
             official_idx = []
             for i in range(1, len(title)+1):
@@ -85,6 +108,7 @@ while True:
             
             next_pagination_cmt = driver.find_element(By.CSS_SELECTOR, ".ant-pagination-next .ant-pagination-item-link")
             next_pagination_cmt.click()
+
             print("Clicked on button next page!")
             sleep(random.randint(1,3))
             try:
