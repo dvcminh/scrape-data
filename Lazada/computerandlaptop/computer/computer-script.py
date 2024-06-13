@@ -5,6 +5,13 @@ import random
 from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException
 from selenium.webdriver.common.by import By
 import pandas as pd
+from pymongo import MongoClient
+import datetime
+
+client = MongoClient('mongodb+srv://21522348:5uJVhT1HGNK003jB@cluster0.czgkfdu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')  # Replace with your MongoDB URI
+db = client['mika'] 
+collection = db['product'] 
+
 # Declare browser
 driver = webdriver.Chrome()
 
@@ -104,158 +111,31 @@ while True:
 
             df5 = df3.merge(df4, how='left', left_on='index_', right_on='official_idx')
 
+            data_dict = df5.to_dict("records")
+            collection.insert_many(data_dict)
+            print(f"Inserted {len(data_dict)} records into MongoDB")
+
             # ================================ Next pagination
             
             next_pagination_cmt = driver.find_element(By.CSS_SELECTOR, ".ant-pagination-next .ant-pagination-item-link")
             next_pagination_cmt.click()
 
             print("Clicked on button next page!")
-            sleep(random.randint(1,3))
+            sleep(random.randint(7,10))
             try:
                 close_btn = driver.find_element("xpath", "/html/body/div[7]/div[2]/div") 
                 close_btn.click()
                 print("Clicked on button exit!")
-                sleep(random.randint(1,3))
+                sleep(random.randint(7,10))
             except:
                 pass
             count += 1
-            all_data = pd.concat([all_data, df5], ignore_index=True)
+            # all_data = pd.concat([all_data, df5], ignore_index=True)
+
+        
         except Exception as e:
             print("End of pages or an error occurred: ", str(e))
             break
 
-all_data.to_csv('lazada.csv', index=False)
-
-# ================================ GET more infor of each item  
-# list1 = []
-# list1 = [1,2,3,4] + list1     
-
-# driver.get(links[0])
-
-# elems_name = driver.find_elements(By.CSS_SELECTOR , ".middle")
-# name_comment = [elem.text for elem in elems_name]
-
-# elems_content = driver.find_elements(By.CSS_SELECTOR , ".item-content .content")
-# content_comment = [elem.text for elem in elems_content]
-
-# elems_skuInfo= driver.find_elements(By.CSS_SELECTOR , ".item-content .skuInfo")
-# skuInfo_comment = [elem.text for elem in elems_skuInfo]
-
-# elems_likeCount = driver.find_elements(By.CSS_SELECTOR , ".item-content .bottom .left .left-content")
-# like_count = [elem.text for elem in elems_likeCount]
-
-# df4 = pd.DataFrame(list(zip(name_comment , content_comment, skuInfo_comment, like_count)), 
-#                    columns = ['name_comment', 'content_comment','skuInfo_comment', 'like_count'])
-# # df4['link_item'] = links[0]
-# df4.insert(0, "link_item", links[0])
-
-# # ================================ next pagination
-# # next_pagination_cmt = driver.find_element("xpath", "/html/body/div[4]/div/div[10]/div[1]/div[2]/div/div/div/div[3]/div[2]/div/button[2]")
-# # next_pagination_cmt.click()
-# # sleep(random.randint(1,3))
-# # close_btn = driver.find_element("xpath", "/html/body/div[7]/div[2]/div")
-# # close_btn.click()
-
-
-# # ================================
-# count = 1
-# name_comment, content_comment, skuInfo_comment, like_count = [], [], [], []
-# while count < 10:
-#     try:
-#         print("Crawl Page " + str(count))
-#         elems_name = driver.find_elements(By.CSS_SELECTOR , ".middle")
-#         name_comment = [elem.text for elem in elems_name] + name_comment
-        
-#         elems_content = driver.find_elements(By.CSS_SELECTOR , ".item-content .content")
-#         content_comment = [elem.text for elem in elems_content] + content_comment
-        
-#         elems_skuInfo= driver.find_elements(By.CSS_SELECTOR , ".item-content .skuInfo")
-#         skuInfo_comment = [elem.text for elem in elems_skuInfo] + skuInfo_comment
-        
-#         elems_likeCount = driver.find_elements(By.CSS_SELECTOR , ".item-content .bottom .left .left-content")
-#         like_count = [elem.text for elem in elems_likeCount] + like_count
-
-#         next_pagination_cmt = driver.find_element("xpath", "/html/body/div[4]/div/div[10]/div[1]/div[2]/div/div/div/div[3]/div[2]/div/button[2]")
-#         next_pagination_cmt.click()
-#         print("Clicked on button next page!")
-#         sleep(random.randint(1,3))
-#         # try:
-#         #     close_btn = driver.find_element("xpath", "/html/body/div[7]/div[2]/div") 
-#         #     close_btn.click()
-#         #     print("Clicked on button exit!")
-#         #     sleep(random.randint(1,3))
-#         # # except ElementNotInteractableException:
-#         # #     continue
-#         # except NoSuchElementException:
-#         #     print("No Such Element Exception!")
-#         #     continue
-#         sleep(random.randint(1,3))
-#         count += 1
-#     except ElementNotInteractableException:
-#         print("Element Not Interactable Exception!")
-#         break
-#     except:
-#         print("Error!")
-#         break
-    
-# df4 = pd.DataFrame(list(zip(name_comment , content_comment, skuInfo_comment, like_count)), 
-#                    columns = ['name_comment', 'content_comment','skuInfo_comment', 'like_count'])
-# # df4['link_item'] = links[0]
-# df4.insert(0, "link_item", links[0])    
-    
-# =============================================================================
-
-
-# ============================GET INFOMATION OF ALL ITEMS
-# def getDetailItems(link):
-#     driver.get(link)
-#     count = 1
-#     name_comment, content_comment, skuInfo_comment, like_count = [], [], [], []
-#     while True:
-#         try:
-#             print("Crawl Page " + str(count))
-#             elems_name = driver.find_elements(By.CSS_SELECTOR , ".middle")
-#             name_comment = [elem.text for elem in elems_name] + name_comment
-            
-#             elems_content = driver.find_elements(By.CSS_SELECTOR , ".item-content .content")
-#             content_comment = [elem.text for elem in elems_content] + content_comment
-            
-#             elems_skuInfo= driver.find_elements(By.CSS_SELECTOR , ".item-content .skuInfo")
-#             skuInfo_comment = [elem.text for elem in elems_skuInfo] + skuInfo_comment
-            
-#             elems_likeCount = driver.find_elements(By.CSS_SELECTOR , ".item-content .bottom .left .left-content")
-#             like_count = [elem.text for elem in elems_likeCount] + like_count
-#             next_pagination_cmt = driver.find_element("xpath", "/html/body/div[4]/div/div[10]/div[1]/div[2]/div/div/div/div[3]/div[2]/div/button[2]")
-#             next_pagination_cmt.click()
-#             print("Clicked on button next page!")
-#             sleep(random.randint(1,3))
-#             try:
-#                 close_btn = driver.find_element("xpath", "/html/body/div[7]/div[2]/div") 
-#                 close_btn.click()
-#                 print("Clicked on button exit!")
-#                 sleep(random.randint(1,3))
-#             except:
-#                 pass
-#             count += 1
-#         except Exception as e:
-#             print("End of pages or an error occurred: ", str(e))
-#             break
-        
-#     df4 = pd.DataFrame(list(zip(name_comment , content_comment, skuInfo_comment, like_count)), 
-#                        columns = ['name_comment', 'content_comment','skuInfo_comment', 'like_count'])
-#     # df4['link_item'] = links[0]
-#     df4.insert(0, "link_item", link)
-#     return df4
-
-# df_list = []
-# for link in links:
-#     df = getDetailItems(link)
-#     df_list.append(df)
-
-# df_all = pd.concat(df_list, ignore_index=True)
-
-# df_all.to_csv('lazada_comment.csv', index=False)
-
-
-# Close browser
+# all_data.to_csv('lazada_computer.csv', index=False)
 driver.close()    
