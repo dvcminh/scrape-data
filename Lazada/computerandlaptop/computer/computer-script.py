@@ -17,7 +17,6 @@ driver = webdriver.Chrome()
 
 # Open URL
 driver.get("https://www.lazada.vn/may-tinh-de-ban-va-phu-kien/?spm=a2o4n.searchlistcategory.cate_1.4.2e7425bc4StNUD")
-sleep(random.randint(5,10))
 count = 1
 all_data = pd.DataFrame()
 while True:
@@ -32,19 +31,19 @@ while True:
             title = [elem.text for elem in elems]
             links = [elem.get_attribute('href') for elem in elems]
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.1);")
-            sleep(3)
+            sleep(5)
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.2);")
-            sleep(3)
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.3);")
-            sleep(3)
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.4);")
-            sleep(3)
+            sleep(5)
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.5);")
-            sleep(3)
+            sleep(5)
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.4);")
+            sleep(5)
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.5);")
+            sleep(5)
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.6);")
-            sleep(3)
+            sleep(5)
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.7);")
-            sleep(3)
+            sleep(5)
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.87);")
             sleep(random.randint(3, 5))
             img_elements = driver.find_elements(By.CSS_SELECTOR, "._95X4G .picture-wrapper.jBwCF img")
@@ -99,7 +98,7 @@ while True:
             df3['subcategory'] = 'computer'
             # ================================ GET official status
             elems_official = driver.find_elements(By.CSS_SELECTOR , ".RfADt")
-            official = ['1' if elem_official.find_elements(By.CSS_SELECTOR, 'i.ic-dynamic-badge-76432') else '0' for elem_official in elems_official]
+            official = [1 if elem_official.find_elements(By.CSS_SELECTOR, 'i.ic-dynamic-badge-76432') else 0 for elem_official in elems_official]
             
             official_idx = []
             for i in range(1, len(title)+1):
