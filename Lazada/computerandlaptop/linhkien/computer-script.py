@@ -16,11 +16,11 @@ collection = db['product']
 driver = webdriver.Chrome()
 
 # Open URL
-driver.get("https://www.lazada.vn/laptop/?spm=a2o4n.searchlistcategory.cate_1.3.25a525bcD9r1Um")
+driver.get("https://www.lazada.vn/linh-kien-may-tinh/?spm=a2o4n.searchlistcategory.cate_2.8.20b825bcMpuM0K")
 count = 1
 all_data = pd.DataFrame()
 while True:
-        if count > 10:
+        if count > 5:
             break
         sleep(random.randint(3,5))
         try:
@@ -31,21 +31,21 @@ while True:
             title = [elem.text for elem in elems]
             links = [elem.get_attribute('href') for elem in elems]
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.1);")
-            sleep(5)
+            sleep(random.randint(5,7))
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.2);")
-            sleep(5)
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.5);")
-            sleep(5)
+            sleep(random.randint(5,7))
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.3);")
+            sleep(random.randint(5,7))
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.4);")
-            sleep(5)
+            sleep(random.randint(5,7))
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.5);")
-            sleep(5)
+            sleep(random.randint(5,7))
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.6);")
-            sleep(5)
+            sleep(random.randint(5,7))
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.7);")
-            sleep(5)
+            sleep(random.randint(5,7))
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight * 0.87);")
-            sleep(random.randint(3, 5))
+            sleep(random.randint(5,7))
             img_elements = driver.find_elements(By.CSS_SELECTOR, "._95X4G .picture-wrapper.jBwCF img")
             img_links = [elem.get_attribute('src') for elem in img_elements]
 
@@ -95,7 +95,7 @@ while True:
             df3['countReviews'] = countReviews
             df3['type'] = 'lazada'
             df3['category'] = 'maytinh'
-            df3['subcategory'] = 'laptop'
+            df3['subcategory'] = 'linhkien'
             # ================================ GET official status
             elems_official = driver.find_elements(By.CSS_SELECTOR , ".RfADt")
             official = [1 if elem_official.find_elements(By.CSS_SELECTOR, 'i.ic-dynamic-badge-76432') else 0 for elem_official in elems_official]

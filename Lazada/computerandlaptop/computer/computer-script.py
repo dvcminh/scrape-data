@@ -94,8 +94,8 @@ while True:
 
             df3['countReviews'] = countReviews
             df3['type'] = 'lazada'
-            df3['category'] = 'computerandlaptop'
-            df3['subcategory'] = 'computer'
+            df3['category'] = 'maytinh'
+            df3['subcategory'] = 'pc'
             # ================================ GET official status
             elems_official = driver.find_elements(By.CSS_SELECTOR , ".RfADt")
             official = [1 if elem_official.find_elements(By.CSS_SELECTOR, 'i.ic-dynamic-badge-76432') else 0 for elem_official in elems_official]
